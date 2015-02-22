@@ -1,0 +1,134 @@
+---
+title: "Course Assignment Practical Machine Learning"
+output: html_document
+---
+
+This is the discription for the assignment of the practical machine learning course.
+Implementation was run successfully on Mac OS 10.10.2 with RStudio 0.98
+
+
+## Basics
+
+More detailed information about the data is available at the Human Activity Recognition site
+http://groupware.les.inf.puc-rio.br/har
+
+## GitHub
+
+The code is available at git hub:
+
+
+## Machine Learning Assignement
+
+
+
+### Exploring the Data
+
+Data was temporarily read and explored using str() and summary().
+Raw training and testing data has the following dimensions
+ 
+```r
+dim (rawTraining)
+[1] 19622   160
+dim (rawTesting)
+[1]  20 160
+```
+
+Preliminary finding: many columns contain NAs, some data constains some "#DIV/0!"
+
+ 
+
+### Data Loading
+
+Data is read using `read.csv()` and "#DIV/0!" strings are treated as NAs.
+
+```r
+rawTraining <- read.csv("pml-training.csv", header="TRUE", na.strings=c("#DIV/0!") )
+rawTesting <- read.csv("pml-testing.csv", header="TRUE", na.strings=c("#DIV/0!"))
+```
+
+### Data Cleaning
+
+The first few columns contain the names of the athletes, timing etc. These columns don't serve to build a model, so they are removed from the data set.
+
+```r
+# remove columns with names and times etc.
+rawTraining <- rawTraining [ -c(1:7)]
+evaluation <- evaluation [ -c(1:7)]
+        
+# remove empty columns with NAs only
+training <- rawTraining[ , colSums(is.na(rawTraining)) == 0   ]
+evaluation <-evaluation[ , colSums(is.na(evaluation)) == 0   ]
+```
+
+
+### Data Partitioning
+
+The data is then partitioned based on `training$classe` with a 70:30 ratio.
+
+```r
+# partition clean data now, 70% of data
+part <- createDataPartition(y=training$classe, p=0.70, list=FALSE )
+training <- training[part,]
+test <-  training[-part,]
+```
+
+
+### Model Fitting
+
+We fit the model using the parallel random forest algorithm. 
+
+```r
+# parallel random forest of training data        
+ctrl<-trainControl(method="cv", number=4, allowParallel=T, verbose=T)
+model <-train(classe ~ .,data=training, method="rf", trControl=ctrl, verbose=F)
+```
+
+
+### Error Model and Cross Validation
+
+We evaluate the accuracy of the fitted model by computing the confusionMatrix for the **training data set**.
+Using 53 predictor varialbes for 4 classes using cross validation at a 4 fold the accuracy is close to 1 with a 95% confidence interval of 0.9991 and a Kappa value of 0.99.
+
+```r
+# predictions
+# prediction outcome of test data
+        
+predTest <- predict(model, newdata=test)
+confusionMatrix(predTest,test$classe)
+```
+
+## Prediction Data
+
+For the evaluation data the following outcome is predicted:
+
+```r
+> pred20<-predict(model, newdata=evaluation)
+> pred20
+ [1] B A B A A E D B A A B C B A E E A B B B
+Levels: A B C D E
+```
+
+
+
+## Performance Tuning
+
+Additionally we could use those variables only that contribute to the accuracy of the model. By restricting the number of variables it's possible to speed up the modelling step above.
+
+The variables of importance can be derived as follows:
+
+```r
+> varImp(model)
+rf variable importance
+
+  only 20 most important variables shown (out of 52)
+
+                     Overall
+roll_belt            100.000
+pitch_forearm         62.488
+yaw_belt              56.888
+magnet_dumbbell_y     43.954
+pitch_belt            43.793
+magnet_dumbbell_z     43.302
+roll_forearm          37.332
+```
+
