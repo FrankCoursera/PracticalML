@@ -14,8 +14,10 @@ http://groupware.les.inf.puc-rio.br/har
 
 ## GitHub
 
-The code is available at git hub:
-
+The R source code for this assignment is available at git hub: 
+https://github.com/FrankCoursera/PracticalML
+Implementation was run successfully on Mac OS 10.10.2 with RStudio 0.98.
+The 20 test cases were successfully predicted using the generated model.
 
 ## Machine Learning Assignement
 
@@ -110,7 +112,7 @@ Levels: A B C D E
 
 
 
-## Performance Tuning
+## Appendix: Performance Tuning
 
 Additionally we could use those variables only that contribute to the accuracy of the model. By restricting the number of variables it's possible to speed up the modelling step above.
 

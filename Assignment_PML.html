@@ -62,7 +62,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 <div id="github" class="section level2">
 <h2>GitHub</h2>
-<p>The code is available at git hub:</p>
+<p>The R source code for this assignment is available at git hub: <a href="https://github.com/FrankCoursera/PracticalML">https://github.com/FrankCoursera/PracticalML</a> Implementation was run successfully on Mac OS 10.10.2 with RStudio 0.98. The 20 test cases were successfully predicted using the generated model.</p>
 </div>
 <div id="machine-learning-assignement" class="section level2">
 <h2>Machine Learning Assignement</h2>
@@ -125,8 +125,8 @@ confusionMatrix(predTest,test$classe)</code></pre>
  [1] B A B A A E D B A A B C B A E E A B B B
 Levels: A B C D E</code></pre>
 </div>
-<div id="performance-tuning" class="section level2">
-<h2>Performance Tuning</h2>
+<div id="appendix-performance-tuning" class="section level2">
+<h2>Appendix: Performance Tuning</h2>
 <p>Additionally we could use those variables only that contribute to the accuracy of the model. By restricting the number of variables it’s possible to speed up the modelling step above.</p>
 <p>The variables of importance can be derived as follows:</p>
 <pre class="r"><code>&gt; varImp(model)
