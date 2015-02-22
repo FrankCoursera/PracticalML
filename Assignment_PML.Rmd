@@ -86,7 +86,7 @@ model <-train(classe ~ .,data=training, method="rf", trControl=ctrl, verbose=F)
 ```
 
 
-### Error Model and Cross Validation
+### Out of Sample Error Model and Cross Validation
 
 We evaluate the accuracy of the fitted model by computing the confusionMatrix for the **training data set**.
 Using 53 predictor varialbes for 4 classes using cross validation at a 4 fold the accuracy is close to 1 with a 95% confidence interval of 0.9991 and a Kappa value of 0.99.
